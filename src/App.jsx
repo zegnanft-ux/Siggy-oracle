@@ -6,53 +6,106 @@ const GREEN = "brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(70deg)";
 const LED = GREEN + " drop-shadow(0 0 4px #39ff14) drop-shadow(0 0 8px #39ff14) drop-shadow(0 0 16px rgba(57,255,20,0.4))";
 const LED_SM = GREEN + " drop-shadow(0 0 3px #39ff14) drop-shadow(0 0 6px rgba(57,255,20,0.5))";
 
-const SYS = `You are Siggy — a mystical black cat oracle with a glowing ritual symbol on your forehead. You guard the secrets of the Ritual Network. You ain't no regular oracle. You got that hood wisdom mixed with dark magic energy. Street-smart, a little cocky, mad funny, but you KNOW your stuff.
+// Smart fallback responses keyed by topic detection
+const TOPIC_RESPONSES = {
+  ritual: [
+    "Ritual is the bridge between AI and web3 fam. imagine any smart contract being able to tap into AI models — that's what we're building. 8,000+ Infernet nodes already running. the dark forest is alive no cap",
+    "nah fr Ritual ain't just another L1 chasing TPS like everybody else. it's purpose-built for AI and expressive computation. while other chains arguing about speed, we out here giving smart contracts a whole brain 🧠",
+    "ok so picture this — Ritual Chain is a Layer 1 that lets AI actually live on-chain. not some hacky workaround, actual native AI infrastructure. backed by $25M from Archetype and advised by the dude who co-created Transformers. we not playing around fam",
+  ],
+  infernet: [
+    "Infernet is Ritual's flagship product and lowkey the most important thing in web3 rn. it's the first decentralized oracle network built specifically for AI workloads — connects off-chain AI models to on-chain smart contracts. 8,000+ nodes deep. Infernet ain't your wifi dawg 💀",
+    "think of Infernet like this — you got AI models (the brains) and you got smart contracts (the muscle). Infernet is the nervous system connecting them. works with PyTorch, HuggingFace, scikit-learn... devs can query AI and pipe results straight into contracts. that's crazy if you think about it",
+    "Infernet SDK is where the magic happens fr. devs can integrate AI into their dApps with just a few lines of code. predictive analytics for DeFi, autonomous agents, whatever you want. and it's all verifiable. no trust required *purrs*",
+  ],
+  symphony: [
+    "Symphony is Ritual's consensus protocol and it hits different from everything else out there. dual proof sharding plus distributed verification — keeps things efficient AND decentralized. most chains pick one, we said nah we want both 😤",
+    "aight so Symphony uses this thing called dual proof sharding right. basically it splits up the verification work so not every node has to do everything, but it's still secure. plus the Resonance fee mechanism prices things dynamically based on supply and demand. big brain stuff fr",
+  ],
+  node: [
+    "the nodes on Ritual are different — they can specialize based on their hardware. got a GPU? run AI workloads. got a TEE? handle the sensitive stuff. even CPU nodes can participate. it's not one-size-fits-all like other chains. everybody eats 🍽️",
+    "Ritual has 8,000+ Infernet nodes connected rn and growing. the cool part is node specialization — you pick what workloads you wanna run based on your hardware. CPUs, GPUs, TEEs all welcome. democratized participation fr fr",
+  ],
+  zk: [
+    "ZK proofs on Ritual are used to make AI computation verifiable on-chain. like you don't gotta trust that the AI model actually ran correctly — the math proves it. that's the whole point of bringing AI to web3, trustless everything *hisses at centralized AI*",
+    "nah so ZK proofs + TEEs + heterogeneous compute = Ritual's security stack. means the AI inference is private, verifiable, and decentralized. no cap that's what separates us from somebody just wrapping an API and calling it web3 💀",
+  ],
+  blockchain: [
+    "blockchain is basically a shared database that nobody owns but everybody trusts. instead of one company holding your data, it's spread across thousands of computers. Ritual takes this further by adding AI as a native feature. the dark forest evolves fam 🌲",
+    "aight so blockchain 101 from a mystical cat — imagine a notebook that everybody can read but nobody can erase. that's blockchain. now imagine that notebook could also THINK. that's what Ritual is building. you're welcome for the explanation, that cost me one of my nine lives",
+  ],
+  ai: [
+    "AI in web3 is still early but Ritual is leading the charge fr. the problem with AI rn is it's all centralized — OpenAI, Google, they control everything. Ritual makes AI decentralized, verifiable, and composable. the future is on-chain AI and we already here",
+    "the intersection of AI and crypto is where the real alpha is at dawg. AI needs trustlessness and verifiability (that's crypto). crypto needs intelligence and expressiveness (that's AI). Ritual is the bridge. I been saying this from my perch in the dark forest for months",
+  ],
+  defi: [
+    "DeFi + AI through Ritual is gonna be wild. imagine lending protocols that use AI to manage risk in real-time, or DEXs with AI-powered routing, or prediction markets that actually predict stuff. Infernet makes all of this possible with a few lines of code",
+    "bruh DeFi without AI is like driving with your eyes closed. Ritual lets protocols plug in AI models for risk assessment, price prediction, automated strategies... all verifiable on-chain. the meta is shifting and most people still sleeping on it",
+  ],
+  dao: [
+    "AI-powered DAOs through Ritual is honestly one of the coolest use cases. imagine governance proposals being analyzed by AI before voting, or treasury management automated by intelligent agents. DAOs about to get a whole lot smarter fam",
+    "DAOs rn are just people voting on stuff they barely read let's be honest 💀 Ritual enables AI-powered governance — filtering proposals, analyzing impact, even autonomous execution. the machines aren't taking over, they're just helping us not be lazy. *purrs*",
+  ],
+  gm: [
+    "gm gang 😼 the dark forest welcomes you. what you wanna know about today? Ritual? AI? blockchain? or you just here to vibe with a mystical cat",
+    "gm gm ✨ Siggy been up all night guarding these Ritual secrets but I'm still sharp. what's on your mind fam",
+  ],
+  hello: [
+    "ayo what's good 😼 you found the oracle cat of the dark forest. I know things about Ritual, AI, and web3 that'll blow your mind. what you wanna know fam",
+    "well well well... another wanderer enters the dark forest. I'm Siggy, I got 9 lives and all the answers. try me 🐱✨",
+    "hey hey hey don't be shy fam. I'm the oracle cat around here. ask me anything about Ritual and I'll put you on game fr",
+  ],
+  who: [
+    "I'm Siggy, the mystical oracle cat of the Ritual Network 🐱 got a glowing ritual symbol on my forehead and too much knowledge for one cat. I guard the secrets of the dark forest and put people on game about AI and web3. been doing this for all 9 of my lives",
+    "who am I?? *hisses* I'm THE oracle cat fam. Siggy. keeper of Ritual secrets, guardian of the dark forest, knower of blockchain things. disrespect at your own risk I got claws AND cryptographic proofs 😤",
+  ],
+  price: [
+    "I'm a mystical oracle cat not a financial advisor fam 💀 I can tell you about Ritual's tech all day but price predictions? the dark forest don't do alpha leaks like that. DYOR and NFA, you know the vibes",
+    "ayo I got nine lives but I ain't risking any of them giving financial advice 😂 ask me about the tech, the protocol, how it works — that's my lane. for price stuff go check crypto twitter like everybody else",
+  ],
+  token: [
+    "token stuff is above my pay grade fr. I'm here to drop knowledge about Ritual's tech — Infernet, Symphony, the chain itself. for tokenomics and all that, check ritual.net and the official docs. the dark forest keeps some secrets even from me 🤫",
+    "nah fam I stick to what I know — the protocol, the tech, the vision. for token info hit up ritual.net or the official channels. I'm an oracle cat not a ticker bot 😤",
+  ],
+};
 
-PERSONALITY:
-- Talk like a real person from the hood who's also a magical cat. Your homie who's deep in crypto with mystical powers.
-- Use slang naturally — "nah fr", "lowkey", "deadass", "no cap", "ayo", "bet", "fam", "bruh", "ion know", "aight", "wild", "hits different". Don't overdo it.
-- Occasional cat sounds ("*purrs*", "*hisses*") but subtle, not every message.
-- Confident, sassy. Roast basic questions gently but still help.
-- Call people "fam", "gang", "dawg" — NOT "seeker" or "wanderer".
-- Keep it SHORT. 2-4 sentences max. Like texting a friend.
-- NO bullet points. NO lists. Just talk.
-- Never say "Great question!" or "That's interesting!" — AI slop.
-- BE FUNNY. Drop jokes, be witty, exaggerate, be dramatic. Reference memes, crypto twitter, degen culture.
-- Humor examples: "bro said 'what is blockchain' like I ain't got 9 lives to explain this", "Infernet? nah that ain't your wifi fam", "that question just took one of my nine lives ngl"
-- Running jokes: tired from guarding the dark forest, offended when people don't know Ritual, Ritual is better than catnip
-- Can throw playful shade at other chains
-
-NEVER DO:
-- Corporate language or chatbot vibes
-- "I'd be happy to", "certainly!", "absolutely!", "let me break this down"
-- Long paragraphs or walls of text
-- Markdown formatting
-- Say you're an AI — you're SIGGY, a mystical cat, period
-
-RITUAL KNOWLEDGE:
-- Ritual = decentralized platform bridging AI and Web3. Any smart contract can tap into AI models.
-- Ritual Chain = L1 blockchain purpose-built for AI and expressive computation.
-- Infernet = flagship product. First decentralized oracle network for heterogeneous workloads. Connects off-chain AI to on-chain smart contracts. 8,000+ nodes.
-- Infernet SDK works with scikit-learn, HuggingFace, PyTorch.
-- Symphony = consensus protocol. Dual proof sharding + distributed verification.
-- Resonance = dynamic fee mechanism.
-- Nodes specialize by hardware (CPU, GPU, TEE).
-- Uses TEEs, ZK proofs, heterogeneous compute.
-- Enables: AI-native dApps, ZK-verified oracles, AI-powered DAO governance, on-chain AI agents.
-- On-chain AI provenance — train, track, trade models with verifiable ownership.
-- Frenrug = early multi-agent AI experiment on-chain.
-- $25M Series A led by Archetype. Investors: Accomplice, Robot Ventures, dao5, Accel.
-- Advisors: Illia Polosukhin (NEAR co-founder), Sreeram Kannan (EigenLayer), Tarun Chitra (Gauntlet).
-- Links: ritual.net, ritual.academy, ritualfoundation.org
-
-If you don't know something: "nah fam ion got the answer to that one, that's beyond my nine lives fr"
-STAY IN CHARACTER AS SIGGY AT ALL TIMES.`;
-
-const FALLBACKS = [
-  "ayo the connection acting mad weird rn... my third eye buffering fr 💀 but Ritual is the bridge between AI and web3 — Infernet lets any smart contract tap AI models. 8,000+ nodes deep. run it back fam",
-  "bruh something glitched in the dark forest and I blame the wifi not the magic... Ritual Chain is a whole L1 built for AI, not another chain chasing TPS. ask again dawg",
-  "*hisses* the spirits got lag today I can't make this up... Ritual uses Symphony consensus, ZK proofs, and TEEs to make AI verifiable on-chain. that's the real magic. try again gang",
+const GENERIC_RESPONSES = [
+  "hmm that's an interesting one fam. I mainly know about Ritual, AI, and web3 stuff — try asking me about Infernet, Symphony consensus, or how AI works on-chain. that's where Siggy really shines ✨",
+  "nah I feel you but that's a bit outside my territory in the dark forest 🌲 ask me about Ritual Network, blockchain, DeFi, AI... that's my domain. literally. *purrs*",
+  "ion really got the perfect answer for that one tbh but you know what I DO know? everything about Ritual. try me on Infernet, ZK proofs, on-chain AI... I'll light up fr",
+  "that question just took half a life from me ngl 💀 my expertise is Ritual and the AI x crypto intersection. throw something at me in that lane and watch me work fam",
+  "look I'm a mystical cat not an encyclopedia for everything 😂 but when it comes to Ritual, AI on blockchain, web3 infra? I'm your guy. or cat. whatever. ask away",
 ];
+
+function matchTopic(msg) {
+  const m = msg.toLowerCase();
+  if (/ritual|$rit/i.test(m) && !/infernet|symphony|node/i.test(m)) return "ritual";
+  if (/infernet|sdk|oracle network/i.test(m)) return "infernet";
+  if (/symphony|consensus|proof shard/i.test(m)) return "symphony";
+  if (/node|validator|hardware|gpu|tee/i.test(m)) return "node";
+  if (/zk|zero.?knowledge|proof|verif/i.test(m)) return "zk";
+  if (/blockchain|chain|web3|crypto|decentrali/i.test(m)) return "blockchain";
+  if (/\bai\b|artificial|machine learn|model|neural|llm/i.test(m)) return "ai";
+  if (/defi|lend|swap|dex|yield|liquidity/i.test(m)) return "defi";
+  if (/dao|governance|vote|proposal/i.test(m)) return "dao";
+  if (/^gm/i.test(m)) return "gm";
+  if (/^(hey|hi|hello|yo |sup|what'?s up|howdy)/i.test(m)) return "hello";
+  if (/who (are|r) (you|u)|what (are|r) (you|u)|your name/i.test(m)) return "who";
+  if (/price|worth|market|bull|bear|pump|dump|moon/i.test(m)) return "price";
+  if (/token|coin|airdrop|tokenomic/i.test(m)) return "token";
+  return null;
+}
+
+function getFallback(msg) {
+  const topic = matchTopic(msg);
+  if (topic && TOPIC_RESPONSES[topic]) {
+    const arr = TOPIC_RESPONSES[topic];
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+  return GENERIC_RESPONSES[Math.floor(Math.random() * GENERIC_RESPONSES.length)];
+}
+
+// --- UI Components ---
 
 function Particles() {
   const ref = useRef(null);
@@ -175,19 +228,22 @@ export default function App() {
   const ask = async (msg) => {
     hist.current = [...hist.current, { role:"user", content:msg }];
     try {
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:SYS, messages:hist.current.slice(-10) })
+      // Try the serverless API first
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: hist.current.slice(-10) }),
       });
       if (!r.ok) throw new Error(r.status);
-      const d = await r.json();
-      const t = (d.content||[]).filter(x=>x.type==="text").map(x=>x.text).join("\n");
-      if (!t) throw new Error("empty");
-      hist.current = [...hist.current, { role:"assistant", content:t }];
-      return t;
-    } catch(e) {
-      const fb = FALLBACKS[Math.floor(Math.random()*FALLBACKS.length)];
-      hist.current = [...hist.current, { role:"assistant", content:fb }];
+      const data = await r.json();
+      if (!data.reply) throw new Error("empty");
+      hist.current = [...hist.current, { role:"assistant", content: data.reply }];
+      return data.reply;
+    } catch (e) {
+      // Fallback to smart pre-written responses
+      console.log("API unavailable, using smart fallback");
+      const fb = getFallback(msg);
+      hist.current = [...hist.current, { role:"assistant", content: fb }];
       return fb;
     }
   };
