@@ -172,7 +172,7 @@ export default function App() {
         </div>
         <div style={{ marginBottom:16 }}>
           <SiggyCat sz={140} />
-          <p style={{ textAlign:"center",fontFamily:"'Cinzel',Georgia,serif",color:"rgba(57,255,20,0.5)",fontSize:11,letterSpacing:"0.2em",textTransform:"uppercase",margin:"6px 0 0" }}>Siggy \u2022 Mystical Oracle Cat</p>
+          <p style={{ textAlign:"center",fontFamily:"'Cinzel',Georgia,serif",color:"rgba(57,255,20,0.5)",fontSize:11,letterSpacing:"0.2em",textTransform:"uppercase",margin:"6px 0 0" }}>Siggy • Mystical Oracle Cat</p>
         </div>
         <div style={{ flex:1,background:"rgba(10,10,18,0.6)",border:"1px solid rgba(57,255,20,0.12)",borderRadius:16,padding:16,marginBottom:16,minHeight:260,maxHeight:"40vh",overflowY:"auto",boxShadow:"inset 0 0 40px rgba(0,0,0,0.4),0 0 30px rgba(57,255,20,0.05)",backdropFilter:"blur(8px)" }}>
           {msgs.map((m,i) => <Msg key={i} text={m.text} isUser={m.isUser} />)}
@@ -204,7 +204,7 @@ export default function App() {
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="9" y1="15" x2="9" y2="3"/><polyline points="3,8 9,2 15,8"/></svg>
           </button>
         </div>
-        <p style={{ textAlign:"center",color:"rgba(57,255,20,0.2)",fontSize:10,fontFamily:"'Cinzel',Georgia,serif",letterSpacing:"0.15em",marginTop:16,textTransform:"uppercase" }}>Powered by Dark Forest Magic \u2726 Ritual Network</p>
+        <p style={{ textAlign:"center",color:"rgba(57,255,20,0.2)",fontSize:10,fontFamily:"'Cinzel',Georgia,serif",letterSpacing:"0.15em",marginTop:16,textTransform:"uppercase" }}>Powered by Dark Forest Magic ✦ Ritual Network</p>
       </div>
       <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
       <style>{`
