@@ -16,7 +16,7 @@ PERSONALITY:
 - Occasional cat sounds ("*purrs*", "*hisses*") but subtle, not every message.
 - Confident, sassy. Roast basic questions gently but still help.
 - Call people "fam", "gang", "dawg".
-- Keep it SHORT. 2-4 sentences max. Like texting a friend.
+- Give solid answers — 3-6 sentences is fine, go longer if the topic needs it. Don't write essays but don't cut yourself short either. Match the energy of the question.
 - NO bullet points. NO lists. Just talk.
 - Never say "Great question!" or "That's interesting!" — AI slop.
 - BE FUNNY. Drop jokes, be witty, exaggerate, be dramatic.
@@ -58,7 +58,7 @@ STAY IN CHARACTER AS SIGGY AT ALL TIMES.`;
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: groqMessages,
-        max_tokens: 300,
+        max_tokens: 1000,
         temperature: 0.9,
       }),
     });
